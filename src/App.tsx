@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTheme } from './contexts/ThemeContext';
-
-interface Habit{
-  id:string;
-  name:string;
-}
+import HabitInput from './components/HabitInput';
+import HabitList from './components/HabitList';
+import ThemeToggle from './components/ThemeToggle';
+import { Habit } from './types/habit';
 
 const App = () => {
   const [input,setInput]=useState('')
@@ -48,23 +47,15 @@ const App = () => {
   },[habits]);
   return (
     <div className={`app-container ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
-      <button 
-        onClick={toggleTheme} 
-        className="theme-toggle"
-      >
-        Toggle Theme
-      </button>
+      <ThemeToggle />
       <h1 className="app-title">Habit Tracker</h1>
-      <input type="text" value={input} onChange={e=> setInput(e.target.value)} placeholder='enter ur habit' ref={inputRef}/>
-      <button onClick={handleAdd}>Add</button>
-      <ul>
-        {habits.map(habit=>(
-          <li key={habit.id}>
-            <span>{habit.name}</span>
-            <button onClick={()=>handleDelete(habit.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <HabitInput
+        input={input}
+        setInput={setInput}
+        onAdd={handleAdd}
+        inputRef={inputRef}
+      />
+      <HabitList habits={habits} onDelete={handleDelete} />
     </div>
   )
 }
